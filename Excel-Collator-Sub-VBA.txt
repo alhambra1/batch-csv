@@ -1,0 +1,110 @@
+'Excel VBA Sub: Collate_All_CSV_Files_In_Folder_To_Worksheets()
+
+' choose folder function
+Private Const BIF_RETURNONLYFSDIRS As Long = &H1
+Private Const BIF_DONTGOBELOWDOMAIN As Long = &H2
+Private Const BIF_RETURNFSANCESTORS As Long = &H8
+Private Const BIF_BROWSEFORCOMPUTER As Long = &H1000
+Private Const BIF_BROWSEFORPRINTER As Long = &H2000
+Private Const BIF_BROWSEINCLUDEFILES As Long = &H4000
+Private Const MAX_PATH As Long = 260
+
+Type BrowseInfo
+    hOwner As Long
+    pidlRoot As Long
+    pszDisplayName As String
+    lpszINSTRUCTIONS As String
+    ulFlags As Long
+    lpfn As Long
+    lParam As Long
+    iImage As Long
+End Type
+
+Type SHFILEOPSTRUCT
+    hwnd As Long
+    wFunc As Long
+    pFrom As String
+    pTo As String
+    fFlags As Integer
+    fAnyOperationsAborted As Boolean
+    hNameMappings As Long
+    lpszProgressTitle As String
+End Type
+
+Declare Function SHGetPathFromIDListA Lib "shell32.dll" ( _
+    ByVal pidl As Long, _
+    ByVal pszBuffer As String) As Long
+
+Declare Function SHBrowseForFolderA Lib "shell32.dll" ( _
+    lpBrowseInfo As BrowseInfo) As Long
+
+
+Function BrowseFolder(Optional Caption As String = "") As String
+
+Dim BrowseInfo As BrowseInfo
+Dim FolderName As String
+Dim ID As Long
+Dim Res As Long
+
+With BrowseInfo
+   .hOwner = 0
+   .pidlRoot = 0
+   .pszDisplayName = String$(MAX_PATH, vbNullChar)
+   .lpszINSTRUCTIONS = Caption
+   .ulFlags = BIF_RETURNONLYFSDIRS
+   .lpfn = 0
+End With
+
+FolderName = String$(MAX_PATH, vbNullChar)
+ID = SHBrowseForFolderA(BrowseInfo)
+If ID Then
+   Res = SHGetPathFromIDListA(ID, FolderName)
+   If Res Then
+       BrowseFolder = Left$(FolderName, InStr(FolderName, vbNullChar) - 1)
+   End If
+End If
+
+End Function
+
+
+
+Sub Collate_All_CSV_Files_In_Folder_To_Worksheets()
+
+Dim wb As Workbook
+
+Dim FolderPath As String, wbName As String, col As Integer
+Dim wbList() As String, wbCount As Integer, i As Integer
+    
+FolderPath = BrowseFolder
+
+' create list of workbooks in foldername
+wbCount = 0
+wbName = Dir(FolderPath & "\" & "*.csv")
+While wbName <> ""
+    wbCount = wbCount + 1
+    ReDim Preserve wbList(1 To wbCount)
+    wbList(wbCount) = wbName
+    wbName = Dir
+Wend
+If wbCount = 0 Then Exit Sub
+
+For i = 1 To wbCount
+
+    If i > 1 Then Worksheets.Add(After:=Worksheets(Worksheets.Count)).Name = "Sheet" & i
+
+    Application.ScreenUpdating = False ' turn off the screen updating
+    Set wb = Workbooks.Open(FolderPath & "\" & wbList(i), True, True)
+    
+    ' open the source workbook, read only
+    With ThisWorkbook
+        
+        ' read data from the source workbook
+        wb.Sheets(1).Cells.Copy .Sheets("Sheet" & i).Cells
+    End With
+    
+    wb.Close False ' close the source workbook without saving any changes
+    Set wb = Nothing ' free memory
+Next i
+
+Application.ScreenUpdating = True ' turn on the screen updating
+End Sub
