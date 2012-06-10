@@ -10,12 +10,22 @@ set UNIQ_LIST_SUMS_BATCH_PATH=C:\Documents and Settings\user\Desktop\CSV-Utiliti
 REM CHECK FOR CORRECT CONFIGURATION
 if not exist "%GNUWIN_PATH%" set gnu_not=true
 if not exist "%UNIQ_LIST_TOOLS_PATH%" set uniq_list_tools_not=true
+if not exist "%UNIQ_LIST_SUMS_PATH%" set uniq_list_sums_not=true
+if not exist "%UNIQ_LIST_SUMS_BATCH_PATH%" set uniq_list_sums_batch_not=true
 
 if /I "%gnu_not%"=="true" (
   @echo. & @echo Cannot find the GnuWin32 folder, please configure the correct path.
 )
 if /I "%uniq_list_tools_not%"=="true" (
   @echo. & @echo Cannot find the CSV-Utilities folder, please configure the correct path.
+  set ext=true
+)
+if /I "%uniq_list_sums_not%"=="true" (
+  @echo. & @echo Cannot find the file, "uniq-list-sums.awk," please configure the correct path.
+  set ext=true
+)
+if /I "%uniq_list_sums_batch_not%"=="true" (
+  @echo. & @echo Cannot find the file, "uniq-list-sums-batch.awk," please configure the correct path.
   set ext=true
 )
 if "%ext%"=="true" ( 

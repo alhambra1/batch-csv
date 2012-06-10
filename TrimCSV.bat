@@ -10,12 +10,17 @@ set EXCEL_COL_TO_AWK_SYNTAX_PATH=C:\Documents and Settings\User\Desktop\CSV-Util
 REM CHECK FOR CORRECT CONFIGURATION
 if not exist "%GNUWIN_PATH%" set gnu_not=true
 if not exist "%TRIMCSV_PATH%" set trim_csv_not=true
+if not exist "%EXCEL_COL_TO_AWK_SYNTAX_PATH%" set excel_col_to_awk_syntax_not=true
 
 if /I "%gnu_not%"=="true" (
   @echo. & @echo Cannot find the GnuWin32 folder, please configure the correct path.
 )
 if /I "%trim_csv_not%"=="true" (
   @echo. & @echo Cannot find the CSV-Utilities folder, please configure the correct path.
+  set ext=true
+)
+if /I "%excel_col_to_awk_syntax_not%"=="true" (
+  @echo. & @echo Cannot find the file, "ExcelColToAwkSyntax.awk," please configure the correct path.
   set ext=true
 )
 if "%ext%"=="true" ( 
