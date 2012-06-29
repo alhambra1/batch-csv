@@ -19,7 +19,7 @@ BEGIN {
     num_elements++;
     ind = NR+1;
     if (len > max_length) max_length = len;
-	}
+  }
 }
 
 END {
