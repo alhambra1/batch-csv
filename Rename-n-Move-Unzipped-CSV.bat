@@ -7,7 +7,7 @@ mode con lines=40 cols=110
 @echo                          ******************************
 @echo.
 @echo  Rename Unzipped assumes there is only ONE csv file inside each folder in a directory.
-@echo  The program creates a new folder alongside the original one, opens each folder in 
+@echo  The program creates a new directory alongside the original one, opens each folder in 
 @echo  the directory, renames the csv file by it's parent folder name, keeping the file's 
 @echo  original extension, and moves the file to the new directory. Please make sure there 
 @echo  is only one file per folder and that the working directory is clear of any folders 
