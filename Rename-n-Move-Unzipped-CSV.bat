@@ -11,7 +11,7 @@ mode con lines=40 cols=110
 @echo  the directory, renames the csv file by it's parent folder name, keeping the file's 
 @echo  original extension, and moves the file to the new directory. Please make sure there 
 @echo  is only one file per folder and that the working directory is clear of any folders 
-@echo  and files you do not wish to change. An process log is saved in the new folder. 
+@echo  and files you do not wish to change. A process log is saved in the new folder. 
 @echo.
 @echo                                       ***
 @echo.
