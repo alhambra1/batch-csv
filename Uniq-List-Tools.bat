@@ -5,7 +5,7 @@ REM SET PATH CONFIGURATIONS
 set GNUWIN_PATH=C:\Program Files\GnuWin32\Bin
 set UNIQ_LIST_TOOLS_PATH=C:\Documents and Settings\User\Desktop\CSV-Utilities
 set UNIQ_LIST_SUMS_PATH=C:\Documents and Settings\User\Desktop\CSV-Utilities\Awk files\uniq-list-sums.awk
-set UNIQ_LIST_SUMS_BATCH_PATH=C:\Documents and Settings\user\Desktop\CSV-Utilities\Awk files\uniq-list-sums-batch.awk
+set UNIQ_LIST_SUMS_BATCH_PATH=C:\Documents and Settings\User\Desktop\CSV-Utilities\Awk files\uniq-list-sums-batch.awk
 
 REM CHECK FOR CORRECT CONFIGURATION
 if not exist "%GNUWIN_PATH%" set gnu_not=true
@@ -30,7 +30,7 @@ if /I "%uniq_list_sums_batch_not%"=="true" (
 )
 if "%ext%"=="true" ( 
   @echo. & echo Press any key to exit...
-  set /p ext=
+  pause > nul
   exit
 ) 
 
@@ -66,7 +66,7 @@ dir /b *.csv
 @echo.
 set /p FILENAME=  FILE NAME: 
 if not exist "%FILENAME%.csv" ( 
- if not "%FILENAME%"=="all files" set "FILENAME=" & echo. & echo       %FILENAME% does not seem to be a valid file. & echo. & pause & goto GET_FILENAME )
+ if not "%FILENAME%"=="all files" set "FILENAME=" & echo. & echo       System cannot find the file %FILENAME%.csv in the current directory. & echo. & pause & goto GET_FILENAME )
 )
 set FILEPATH=%~dp0%FILENAME%.csv
 
@@ -74,6 +74,10 @@ set FILEPATH=%~dp0%FILENAME%.csv
 set /p COLUMN_A_HEADING=  COLUMN HEADING FOR UNIQUE LIST VALUES: 
 @echo.
 set /p COLUMN_B_HEADING=  COLUMN HEADING FOR VALUES TO SUM: 
+@echo.
+@echo   OPTIONAL SEARCH TEXT FOR UNIQUE LIST COLUMN (separate multiple terms by a comma,
+@echo   leaving no unintended spaces; leave blank if none; escape special characters 
+set /p REGEX=  according to DOS rules): 
 @echo.
 @echo.
 
@@ -90,7 +94,7 @@ if /I "%FILENAME%"=="all files" (
   @echo  Now generating unique-value list and sum for %FILENAME%
   @echo  Headings: [%COLUMN_A_HEADING%] and [%COLUMN_B_HEADING%]
   @echo.
-  awk -v FILENAME_FOR_AWK=%FILENAME% -v COLUMN_A_HEADING=%COLUMN_A_HEADING% -v COLUMN_B_HEADING=%COLUMN_B_HEADING% -f "%UNIQ_LIST_SUMS_PATH%" "%FILEPATH%" > "%~dp0\uniq-tool-output.csv"
+  mawk -v FILENAME_FOR_AWK="%FILENAME%.csv" -v COLUMN_A_HEADING="%COLUMN_A_HEADING%" -v COLUMN_B_HEADING="%COLUMN_B_HEADING%" -v REGEX="%REGEX%" -f "%UNIQ_LIST_SUMS_PATH%" "%FILEPATH%" > "%~dp0\uniq-tool-output.csv"
   cd "%~dp0"
   goto COMPLETED
 )
@@ -103,7 +107,7 @@ for /f "delims=" %%i in ('dir /b *.csv') do (
   cd "%GNUWIN_PATH%"
   @echo  Now generating unique-value list and sum for %%~nxi
   @echo  Headings: [%COLUMN_A_HEADING%] and [%COLUMN_B_HEADING%]
-  awk -v FILENAME_FOR_AWK=%%~nxi -v COLUMN_A_HEADING=%COLUMN_A_HEADING% -v COLUMN_B_HEADING=%COLUMN_B_HEADING% -f "%UNIQ_LIST_SUMS_PATH%" "%%~dpnxi" >> "%~dp0\uniq-tool-sums-tmp.csv"
+  mawk -v FILENAME_FOR_AWK="%%~nxi" -v COLUMN_A_HEADING="%COLUMN_A_HEADING%" -v COLUMN_B_HEADING="%COLUMN_B_HEADING%" -v REGEX="%REGEX%" -f "%UNIQ_LIST_SUMS_PATH%" "%%~dpnxi" >> "%~dp0\uniq-tool-sums-tmp.csv"
   @echo  Done.
   @echo.
   cd "%~dp0"
@@ -112,7 +116,7 @@ for /f "delims=" %%i in ('dir /b *.csv') do (
 )
 
 cd "%GNUWIN_PATH%"
-awk -f "%UNIQ_LIST_SUMS_BATCH_PATH%" "%~dp0\uniq-tool-sums-tmp.csv" > "%~dp0\uniq-tool-output.csv"
+mawk -f "%UNIQ_LIST_SUMS_BATCH_PATH%" "%~dp0\uniq-tool-sums-tmp.csv" > "%~dp0\uniq-tool-output.csv"
 cd "%~dp0"
 del "%~dp0\uniq-tool-sums-tmp.csv"
 
@@ -125,5 +129,5 @@ del "%~dp0\uniq-tool-sums-tmp.csv"
 @echo.
 @echo.
 
-set /p exit=  Press any key to exit...
+@echo Press any key to exit... & pause > nul
 exit

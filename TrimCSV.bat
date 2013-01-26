@@ -25,7 +25,7 @@ if /I "%excel_col_to_awk_syntax_not%"=="true" (
 )
 if "%ext%"=="true" ( 
   @echo. & echo Press any key to exit...
-  set /p ext=
+  pause > nul
   exit
 )
 
@@ -34,7 +34,7 @@ if "%ext%"=="true" (
 @echo                                        * Trim CSV *
 @echo                                        ************
 @echo.
-@echo  Trim CSV relies on the GnuWin package Gawk to extract selected columns from all CSV files in
+@echo  Trim CSV relies on the GnuWin package Mawk to extract selected columns from all CSV files in
 @echo  a folder, and save the trimmed files in a folder called "Trimmed" inside the original folder. 
 @echo  Trim CSV also relies on the included file, "ExcelColToAwkSyntax.awk," to automatically convert
 @echo  any excel columns to awk field syntax. 
@@ -69,7 +69,7 @@ set /p columns=     COLUMNS TO EXTRACT:
 REM convert any Excel columns to numbers
 cd "%GNUWIN_PATH%"
 @echo DELIMITER%columns%DELIMITER > "%TRIMCSV_PATH%\TrimCSV_tmp_file"
-awk -f "%EXCEL_COL_TO_AWK_SYNTAX_PATH%" "%TRIMCSV_PATH%\TrimCSV_tmp_file" > "%TRIMCSV_PATH%\TrimCSV_columns"
+mawk -f "%EXCEL_COL_TO_AWK_SYNTAX_PATH%" "%TRIMCSV_PATH%\TrimCSV_tmp_file" > "%TRIMCSV_PATH%\TrimCSV_columns"
 del "%TRIMCSV_PATH%\TrimCSV_tmp_file"
 
 setLocal EnableDelayedExpansion
@@ -135,9 +135,9 @@ for /f "delims=" %%i in ('dir /b *.csv') do (
   cd "%GNUWIN_PATH%"
 
   if /I "%headings%"=="y" (
-    awk "BEGIN {FS=\",\"; OFS=\",\"} NR==1 {print %columns_converted%; next} /%conditional_text%/{print %columns_converted%}" "%%~dpnxi" > "%folderpath%\trimmed\%%~ni_trimmed.csv"
+    mawk "BEGIN {FS=\",\"; OFS=\",\"} NR==1 {print %columns_converted%; next} /%conditional_text%/{print %columns_converted%}" "%%~dpnxi" > "%folderpath%\trimmed\%%~ni_trimmed.csv"
   ) else (
-    awk "BEGIN {FS=\",\"; OFS=\",\"} /%conditional_text%/{print %columns_converted%}" "%%~dpnxi" > "%folderpath%\trimmed\%%~ni_trimmed.csv"
+    mawk "BEGIN {FS=\",\"; OFS=\",\"} /%conditional_text%/{print %columns_converted%}" "%%~dpnxi" > "%folderpath%\trimmed\%%~ni_trimmed.csv"
   )
   @echo  Done.
 

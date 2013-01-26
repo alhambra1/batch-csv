@@ -9,7 +9,7 @@ function excelColumnToNum(excel_column) {
     string_position--;
     power=j;
     base_number=match(letters, base_string);
-    output_number += base_number*(26**power);
+    output_number += base_number*(26^power);
   }
   return output_number;
 }

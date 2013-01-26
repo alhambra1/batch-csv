@@ -8,6 +8,8 @@ BEGIN {
   FS=",";                                             #field saparator is a comma in csv files
   #COLUMN_A_HEADING = "heading2"                      #will be assigned from batch file command prompt
   #COLUMN_B_HEADING = "heading4"                      #will be assigned from batch file command prompt
+  #REGEX = "needle1|needle2"                          #will be assigned from batch file command prompt
+  gsub(/,/, "|", REGEX)
 }
 
 #ASSIGN COLUMNS TO VARIABLES ACCORDING TO HEADINGS
@@ -19,20 +21,14 @@ NR==1 {                                               #NR means record (or row) 
   next;
 }
 
-#ASSIGN UNIQUE LIST
+#ASSIGN UNIQUE LIST AND GENERATE SUMS
 {
-  if ($column_a != "") unique_list[$column_a]++;
-}
-
-#GENERATE SUMS
-{
-  for (i in unique_list) {
-    if ($column_a ~ i) sums[i] += $column_b;
-  }
+  if (REGEX != "" && $column_a ~ REGEX) unique_list[$column_a]+=$column_b;
+  else if ($column_a != "" && $column_a ~ REGEX) unique_list[$column_a]+=$column_b;
 }
 
 END {
   print COLUMN_A_HEADING "," COLUMN_B_HEADING;
   print "FILENAME," FILENAME_FOR_AWK
-  for (i in unique_list) print i "," sums[i];
+  for (i in unique_list) print i "," unique_list[i];
 }
