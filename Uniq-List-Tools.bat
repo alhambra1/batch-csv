@@ -42,7 +42,7 @@ if "%ext%"=="true" (
 @echo.
 @echo  * Place and run me in the directory of the files you^'d like to work with.
 @echo.
-@echo  * I generate a list of unique values from column_a.
+@echo  * I generate a list of unique values from column_a ^(or search relying on a specific list^).
 @echo.
 @echo  * I generate a sum of rows from column_b for each unique value, where the rows chosen
 @echo    for each sum contain the unique value on column_a.
