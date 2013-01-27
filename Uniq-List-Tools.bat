@@ -71,9 +71,9 @@ if not exist "%FILENAME%.csv" (
 set FILEPATH=%~dp0%FILENAME%.csv
 
 @echo.
-set /p COLUMN_A_HEADING=  COLUMN HEADING FOR UNIQUE LIST VALUES: 
+set /p COLUMN_A_HEADING=  COLUMN HEADING FOR UNIQUE LIST VALUES (case sensitive): 
 @echo.
-set /p COLUMN_B_HEADING=  COLUMN HEADING FOR VALUES TO SUM: 
+set /p COLUMN_B_HEADING=  COLUMN HEADING FOR VALUES TO SUM (case sensitive): 
 @echo.
 @echo   OPTIONAL SEARCH TEXT FOR UNIQUE LIST COLUMN (case sensitive; separate multiple terms
 @echo   by a comma, leaving no unintended spaces; leave blank if none; escape special characters 
