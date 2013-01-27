@@ -23,8 +23,7 @@ NR==1 {                                               #NR means record (or row) 
 
 #ASSIGN UNIQUE LIST AND GENERATE SUMS
 {
-  if (REGEX != "" && $column_a ~ REGEX) unique_list[$column_a]+=$column_b;
-  else if ($column_a != "" && $column_a ~ REGEX) unique_list[$column_a]+=$column_b;
+  if ($column_a != "" && $column_a ~ REGEX) unique_list[$column_a]+=$column_b;
 }
 
 END {

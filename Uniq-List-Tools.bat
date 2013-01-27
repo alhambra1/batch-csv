@@ -42,7 +42,7 @@ if "%ext%"=="true" (
 @echo.
 @echo  * Place and run me in the directory of the files you^'d like to work with.
 @echo.
-@echo  * I generate a list of unique values from column_a ^(or search relying on a specific list^).
+@echo  * I generate a list of unique values from column_a (or search relying on a specific list).
 @echo.
 @echo  * I generate a sum of rows from column_b for each unique value, where the rows chosen
 @echo    for each sum contain the unique value on column_a.
@@ -75,8 +75,8 @@ set /p COLUMN_A_HEADING=  COLUMN HEADING FOR UNIQUE LIST VALUES:
 @echo.
 set /p COLUMN_B_HEADING=  COLUMN HEADING FOR VALUES TO SUM: 
 @echo.
-@echo   OPTIONAL SEARCH TEXT FOR UNIQUE LIST COLUMN (separate multiple terms by a comma,
-@echo   leaving no unintended spaces; leave blank if none; escape special characters 
+@echo   OPTIONAL SEARCH TEXT FOR UNIQUE LIST COLUMN (case sensitive; separate multiple terms
+@echo   by a comma, leaving no unintended spaces; leave blank if none; escape special characters 
 set /p REGEX=  according to DOS rules): 
 @echo.
 @echo.
