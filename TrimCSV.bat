@@ -2,10 +2,12 @@
 mode con lines=40 cols=96
 
 REM SET PATH CONFIGURATIONS
-REM SET PATH CONFIGURATIONS
-set GNUWIN_PATH=C:\Program Files\GnuWin32\Bin
-set TRIMCSV_PATH=C:\Documents and Settings\User\Desktop\CSV-Utilities
-set EXCEL_COL_TO_AWK_SYNTAX_PATH=C:\Documents and Settings\User\Desktop\CSV-Utilities\Awk files\ExcelColToAwkSyntax.awk
+set BASE_PATH=%~dp0
+FOR /F "tokens=1,2 delims=," %%i in (Configuration\Configuration.txt) do (
+  IF %%i==GNUWIN_PATH set GNUWIN_PATH=%%j
+)
+set TRIMCSV_PATH=%BASE_PATH%
+set EXCEL_COL_TO_AWK_SYNTAX_PATH=%BASE_PATH%\Awk files\ExcelColToAwkSyntax.awk
 
 REM CHECK FOR CORRECT CONFIGURATION
 if not exist "%GNUWIN_PATH%" set gnu_not=true
